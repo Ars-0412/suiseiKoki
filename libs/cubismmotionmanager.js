@@ -4,13 +4,13 @@
  * Use of this source code is governed by the Live2D Open Software license
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
-import { CubismMotionQueueManager } from './cubismmotionqueuemanager';
+ { CubismMotionQueueManager } from './cubismmotionqueuemanager';
 /**
  * モーションの管理
  *
  * モーションの管理を行うクラス
  */
-export class CubismMotionManager extends CubismMotionQueueManager {
+ class CubismMotionManager extends CubismMotionQueueManager {
     /**
      * コンストラクタ
      */
@@ -88,10 +88,19 @@ export class CubismMotionManager extends CubismMotionQueueManager {
     }
 }
 // Namespace definition for compatibility.
-import * as $ from './cubismmotionmanager';
+ * as $ from './cubismmotionmanager';
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export var Live2DCubismFramework;
+ var Live2DCubismFramework;
 (function (Live2DCubismFramework) {
     Live2DCubismFramework.CubismMotionManager = $.CubismMotionManager;
 })(Live2DCubismFramework || (Live2DCubismFramework = {}));
 //# sourceMappingURL=cubismmotionmanager.js.map
+
+window.CubismFramework = CubismFramework;
+window.CubismIdManager = CubismIdManager;
+window.CubismRenderer = CubismRenderer;
+window.CSM_ASSERT = CSM_ASSERT;
+window.CubismLogInfo = CubismLogInfo;
+window.CubismLogWarning = CubismLogWarning;
+window.Value = Value;
+window.Constant = Constant;
