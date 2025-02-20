@@ -1,52 +1,45 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Live2D モデルをロード中...");
+console.log("Live2Dモデルロード開始");
 
-    let modelPath = "models/mymodel/suisei_tekoki.model3.json";
-    let modelLoaded = false;
+// ✅ PixiJS と pixi-live2d-display の読み込み確認
+if (typeof PIXI === "undefined" || typeof PIXI.live2d === "undefined") {
+    console.error("❌ PIXI.js または pixi-live2d-display が正しく読み込まれていません！");
+} else {
+    console.log("✅ PIXI.js および pixi-live2d-display の読み込み成功！");
+}
 
-    async function loadLive2DModel() {
-        if (modelLoaded) {
-            console.warn("⚠️ Live2Dモデルは既にロードされています。");
-            return;
-        }
-        modelLoaded = true;
+const app = new PIXI.Application({
+    view: document.getElementById("canvas"),
+    width: 800,
+    height: 600,
+    transparent: true,
+});
 
-        console.log("Live2Dモデルロード開始");
+document.body.appendChild(app.view);
 
-        if (typeof PIXI === "undefined" || typeof PIXI.live2d === "undefined") {
-            console.error("❌ PIXI.js または pixi-live2d-display が正しく読み込まれていません！");
-            return;
-        }
+async function loadModel() {
+    try {
+        console.log("Live2Dモデルを読み込みます...");
+        
+        // ✅ ここでモデルのパスを指定
+        const modelPath = "models/mymodel/suisei_tekoki.model3.json";
 
-        const app = new PIXI.Application({
-            view: document.getElementById("canvas"),
-            width: 800,
-            height: 600,
-            transparent: true,
-        });
+        // ✅ PixiJS Live2Dモデルのロード
+        const model = await PIXI.live2d.Live2DModel.from(modelPath);
+        
+        console.log("✅ Live2Dモデルのロード成功！");
+        
+        app.stage.addChild(model);
+        
+        // 位置とスケール調整
+        model.x = app.renderer.width / 2;
+        model.y = app.renderer.height / 2;
+        model.scale.set(0.5);
 
-        document.body.appendChild(app.view);
-
-        try {
-            const model = await PIXI.live2d.Live2DModel.from(modelPath);
-            app.stage.addChild(model);
-            console.log("✅ Live2Dモデルロード完了");
-        } catch (error) {
-            console.error("❌ Live2Dモデルの読み込みに失敗しました:", error);
-        }
+    } catch (error) {
+        console.error("❌ Live2Dモデルの読み込みに失敗しました！", error);
     }
+}
 
-    if (typeof CubismFramework !== "undefined" && CubismFramework.startUp) {
-        if (!CubismFramework.isStarted()) {
-            CubismFramework.startUp();
-        }
-        if (!CubismFramework.isInitialized()) {
-            CubismFramework.initialize();
-        }
-
-        loadLive2DModel().catch(console.error);
-    } else {
-        console.error("❌ CubismFramework が正しく定義されていません！");
-    }
-}, { once: true });
+// モデルをロード
+loadModel();
 
