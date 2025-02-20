@@ -4,14 +4,14 @@
  * Use of this source code is governed by the Live2D Open Software license
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
-import { CubismMatrix44 } from '../math/cubismmatrix44';
-import { csmRect } from '../type/csmrectf';
+ { CubismMatrix44 } from '../math/cubismmatrix44';
+ { csmRect } from '../type/csmrectf';
 /**
  * モデル描画を処理するレンダラ
  *
  * サブクラスに環境依存の描画命令を記述する。
  */
-export class CubismRenderer {
+ class CubismRenderer {
     /**
      * レンダラのインスタンスを生成して取得する
      *
@@ -209,7 +209,7 @@ export class CubismRenderer {
         this._mvpMatrix4x4.loadIdentity();
     }
 }
-export var CubismBlendMode;
+ var CubismBlendMode;
 (function (CubismBlendMode) {
     CubismBlendMode[CubismBlendMode["CubismBlendMode_Normal"] = 0] = "CubismBlendMode_Normal";
     CubismBlendMode[CubismBlendMode["CubismBlendMode_Additive"] = 1] = "CubismBlendMode_Additive";
@@ -218,7 +218,7 @@ export var CubismBlendMode;
 /**
  * テクスチャの色をRGBAで扱うためのクラス
  */
-export class CubismTextureColor {
+ class CubismTextureColor {
     /**
      * コンストラクタ
      */
@@ -232,7 +232,7 @@ export class CubismTextureColor {
 /**
  * クリッピングマスクのコンテキスト
  */
-export class CubismClippingContext {
+ class CubismClippingContext {
     /**
      * 引数付きコンストラクタ
      */
@@ -272,12 +272,21 @@ export class CubismClippingContext {
     }
 }
 // Namespace definition for compatibility.
-import * as $ from './cubismrenderer';
+ * as $ from './cubismrenderer';
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export var Live2DCubismFramework;
+ var Live2DCubismFramework;
 (function (Live2DCubismFramework) {
     Live2DCubismFramework.CubismBlendMode = $.CubismBlendMode;
     Live2DCubismFramework.CubismRenderer = $.CubismRenderer;
     Live2DCubismFramework.CubismTextureColor = $.CubismTextureColor;
 })(Live2DCubismFramework || (Live2DCubismFramework = {}));
 //# sourceMappingURL=cubismrenderer.js.map
+
+window.CubismFramework = CubismFramework;
+window.CubismIdManager = CubismIdManager;
+window.CubismRenderer = CubismRenderer;
+window.CSM_ASSERT = CSM_ASSERT;
+window.CubismLogInfo = CubismLogInfo;
+window.CubismLogWarning = CubismLogWarning;
+window.Value = Value;
+window.Constant = Constant;
