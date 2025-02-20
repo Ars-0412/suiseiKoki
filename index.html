@@ -8,19 +8,27 @@
 <body>
     <h1>Live2D Cubism 5 テスト</h1>
 
-    <script type="module">
-        import * as PIXI from "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js";
-        import { Live2DCubismFramework as cubism } from "./libs/live2dcubismcore.min.js";
+    <!-- PixiJS の読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
 
+    <!-- Live2D Cubism SDK の読み込み -->
+    <script src="libs/live2dcubismcore.min.js"></script>
+    <script src="libs/cubismframework.js"></script>
+    <script src="libs/cubismmodel.js"></script>
+    <script src="libs/cubismmotionmanager.js"></script>
+    <script src="libs/cubismrenderer.js"></script>
+    <script src="libs/cubismdefaultparameterid.js"></script>
+    <script src="libs/cubismframeworkconfig.js"></script>
+
+    <script>
         console.log("Live2D Cubism SDK 読み込みテスト");
 
-        if (cubism != "undefined") {
+        if (typeof CubismFramework !== "undefined") {
             console.log("✅ CubismFramework がロードされました！");
-            cubism.CubismFramework.startUp();
+            CubismFramework.startUp();
         } else {
             console.error("❌ CubismFramework がロードされていません！");
         }
     </script>
 </body>
 </html>
-
