@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Live2D モデルをロード中...");
 
     let modelPath = "models/mymodel/suisei_tekoki.model3.json";
-    let modelLoaded = false; // モデルが既にロードされたか確認用
+    let modelLoaded = false;
 
     async function loadLive2DModel() {
         if (modelLoaded) {
@@ -48,5 +48,5 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.error("❌ CubismFramework が正しく定義されていません！");
     }
-}, { once: true }); // ✅ `once: true` を追加してイベントを1回しか実行しない
+}, { once: true });
 
