@@ -4,16 +4,16 @@
  * Use of this source code is governed by the Live2D Open Software license
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
-import { CubismFramework } from '../live2dcubismframework';
-import { CubismBlendMode, CubismTextureColor } from '../rendering/cubismrenderer';
-import { csmMap } from '../type/csmmap';
-import { csmVector } from '../type/csmvector';
-import { CSM_ASSERT } from '../utils/cubismdebug';
+ { CubismFramework } from '../live2dcubismframework';
+ { CubismBlendMode, CubismTextureColor } from '../rendering/cubismrenderer';
+ { csmMap } from '../type/csmmap';
+ { csmVector } from '../type/csmvector';
+ { CSM_ASSERT } from '../utils/cubismdebug';
 /**
  * SDK側から与えられたDrawableの乗算色・スクリーン色上書きフラグと
  * その色を保持する構造体
  */
-export class DrawableColorData {
+ class DrawableColorData {
     constructor(isOverwritten = false, color = new CubismTextureColor()) {
         this.isOverwritten = isOverwritten;
         this.color = color;
@@ -22,7 +22,7 @@ export class DrawableColorData {
 /**
  * @brief テクスチャの色をRGBAで扱うための構造体
  */
-export class PartColorData {
+ class PartColorData {
     constructor(isOverwritten = false, color = new CubismTextureColor()) {
         this.isOverwritten = isOverwritten;
         this.color = color;
@@ -31,7 +31,7 @@ export class PartColorData {
 /**
  * テクスチャのカリング設定を管理するための構造体
  */
-export class DrawableCullingData {
+ class DrawableCullingData {
     /**
      * コンストラクタ
      *
@@ -48,7 +48,7 @@ export class DrawableCullingData {
  *
  * Mocデータから生成されるモデルのクラス。
  */
-export class CubismModel {
+ class CubismModel {
     /**
      * モデルのパラメータの更新
      */
@@ -1141,10 +1141,19 @@ export class CubismModel {
     }
 }
 // Namespace definition for compatibility.
-import * as $ from './cubismmodel';
+ * as $ from './cubismmodel';
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export var Live2DCubismFramework;
+ var Live2DCubismFramework;
 (function (Live2DCubismFramework) {
     Live2DCubismFramework.CubismModel = $.CubismModel;
 })(Live2DCubismFramework || (Live2DCubismFramework = {}));
 //# sourceMappingURL=cubismmodel.js.map
+
+window.CubismFramework = CubismFramework;
+window.CubismIdManager = CubismIdManager;
+window.CubismRenderer = CubismRenderer;
+window.CSM_ASSERT = CSM_ASSERT;
+window.CubismLogInfo = CubismLogInfo;
+window.CubismLogWarning = CubismLogWarning;
+window.Value = Value;
+window.Constant = Constant;
