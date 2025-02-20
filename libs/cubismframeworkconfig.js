@@ -28,3 +28,11 @@
  */
  const CSM_LOG_LEVEL = CSM_LOG_LEVEL_VERBOSE;
 //# sourceMappingURL=cubismframeworkconfig.js.map
+window.CubismFramework = CubismFramework;
+window.CubismIdManager = CubismIdManager;
+window.CubismRenderer = CubismRenderer;
+window.CSM_ASSERT = CSM_ASSERT;
+window.CubismLogInfo = CubismLogInfo;
+window.CubismLogWarning = CubismLogWarning;
+window.Value = Value;
+window.Constant = Constant;
