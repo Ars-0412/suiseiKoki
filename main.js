@@ -1,20 +1,20 @@
-console.log("スクリプト読み込み開始");
+console.log("✅ スクリプトが読み込まれました");
 
-// Live2Dモデルのパス
+// Live2D モデルのパス
 const modelPath = "models/mymodel/suisei_tekoki.model3.json";
 
 // PIXI.js のセットアップ
 const app = new PIXI.Application({
-    view: document.getElementById("canvas"),
+    view: document.getElementById("live2dCanvas"), // ID を修正
     width: 800,
     height: 600,
     transparent: true
 });
-console.log("PIXI.js 初期化完了");
+console.log("✅ PIXI.js 初期化完了");
 
 // CubismFramework の初期化
 function initLive2D() {
-    console.log("Live2D Cubism SDK 初期化開始...");
+    console.log("✅ Live2D Cubism SDK 初期化開始...");
 
     if (!Live2DCubismCore) {
         console.error("❌ Live2DCubismCore がロードされていません！");
