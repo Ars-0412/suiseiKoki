@@ -1,50 +1,39 @@
-console.log("✅ スクリプトが読み込まれました");
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("Live2D モデルをロード中...");
 
-// Live2D モデルのパス
-const modelPath = "models/mymodel/suisei_tekoki.model3.json";
+    let modelPath = "models/mymodel/suisei_tekoki.model3.json"; // 変数の二重定義を修正
 
-// PIXI.js のセットアップ
-const app = new PIXI.Application({
-    view: document.getElementById("live2dCanvas"), // ID を修正
-    width: 800,
-    height: 600,
-    transparent: true
+    async function loadLive2DModel() {
+        console.log("Live2Dモデルロード開始");
+
+        if (typeof PIXI === "undefined") {
+            console.error("PIXI.js が正しく読み込まれていません！");
+            return;
+        }
+
+        const app = new PIXI.Application({
+            view: document.getElementById("canvas"),
+            width: 800,
+            height: 600,
+            transparent: true,
+        });
+
+        document.body.appendChild(app.view);
+
+        try {
+            const model = await PIXI.live2d.Live2DModel.from(modelPath);
+            app.stage.addChild(model);
+            console.log("Live2Dモデルロード完了");
+        } catch (error) {
+            console.error("Live2Dモデルの読み込みに失敗しました:", error);
+        }
+    }
+
+    if (typeof CubismFramework !== "undefined" && CubismFramework.startUp) {
+        CubismFramework.startUp();
+        CubismFramework.initialize();
+        loadLive2DModel().catch(console.error);
+    } else {
+        console.error("CubismFramework が正しく定義されていません！");
+    }
 });
-console.log("✅ PIXI.js 初期化完了");
-
-// CubismFramework の初期化
-function initLive2D() {
-    console.log("✅ Live2D Cubism SDK 初期化開始...");
-
-    if (!Live2DCubismCore) {
-        console.error("❌ Live2DCubismCore がロードされていません！");
-        return;
-    }
-
-    CubismFramework.startUp();
-    CubismFramework.initialize();
-
-    console.log("✅ Live2D Cubism SDK 初期化完了！");
-}
-
-// Live2D モデルをロード
-async function loadLive2DModel() {
-    console.log("🔄 Live2D モデルをロード中...");
-
-    try {
-        let model = new CubismUserModel();
-        await model.loadModel(modelPath);
-
-        console.log("✅ Live2D モデルのロードが完了しました！");
-
-        // モデルを PIXI のステージに追加
-        app.stage.addChild(model);
-        console.log("✅ Live2D モデルをステージに追加しました！");
-    } catch (e) {
-        console.error("❌ モデルのロード中にエラー発生:", e);
-    }
-}
-
-// 初期化とロードを実行
-initLive2D();
-loadLive2DModel();
