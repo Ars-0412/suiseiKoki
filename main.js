@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log("Live2Dモデルロード開始");
 
-        if (typeof PIXI === "undefined") {
-            console.error("❌ PIXI.js が正しく読み込まれていません！");
+        if (typeof PIXI === "undefined" || typeof PIXI.live2d === "undefined") {
+            console.error("❌ PIXI.js または pixi-live2d-display が正しく読み込まれていません！");
             return;
         }
 
