@@ -1,31 +1,21 @@
 {
-	"Version": 3,
-	"FileReferences": {
-		"Moc": "suisei_tekoki.moc3",
-		"Textures": [
-<<<<<<< HEAD
-			"texture_00.png"
-=======
-			"suisei_tekoki.2048/texture_00.png"
->>>>>>> 711e8a7 (Fixed Git configuration and added live2dcubismcore.min.js)
-		],
-		"Physics": "suisei_tekoki.physics3.json",
-		"DisplayInfo": "suisei_tekoki.cdi3.json"
-	},
-	"Groups": [
-		{
-			"Target": "Parameter",
-			"Name": "LipSync",
-			"Ids": []
-		},
-		{
-			"Target": "Parameter",
-			"Name": "EyeBlink",
-			"Ids": []
-		}
-	]
- HEAD
+    "Version": 3,
+    "FileReferences": {
+        "Moc": "suisei_tekoki.moc3",
+        "Textures": [
+            "texture_00.png"
+        ],
+        "Physics": "suisei_tekoki.physics3.json",
+        "DisplayInfo": "suisei_tekoki.cdi3.json",
+        "Expressions": [],
+        "Motions": {}
+    },
+    "Groups": [],
+    "HitAreas": [],
+    "Layout": {
+        "CenterX": 0.0,
+        "CenterY": 0.0,
+        "Width": 2.0
+    },
+    "UserData": {}
 }
-
-}
- 711e8a7 (Fixed Git configuration and added live2dcubismcore.min.js)
