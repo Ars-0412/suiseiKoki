@@ -1,29 +1,28 @@
-// PixiJS のセットアップ
-const app = new PIXI.Application({
-    view: document.getElementById("live2dCanvas"),
-    width: 800,  // キャンバスの幅
-    height: 600, // キャンバスの高さ
-    transparent: true // 背景を透明にする
-});
+let live2DModel = null;
 
-// Live2Dモデルのロード
 async function loadLive2DModel() {
-    const modelUrl = "models/mymodel/suisei_tekoki.model3.json"; // モデルのパス
+    console.log("Live2D モデルをロード中...");
+    
+    // Live2Dモデルをロードする
+    live2DModel = await PIXI.live2d.Live2DModel.from("models/mymodel/suisei_tekoki.model3.json");
 
-    // Live2Dモデルを読み込む
-    const model = await PIXI.live2d.Live2DModel.from(modelUrl);
+    if (!live2DModel) {
+        console.error("Live2D モデルのロードに失敗しました！");
+        return;
+    }
 
-    // モデルのサイズ調整
-    model.scale.set(0.5);
-
-    // モデルを画面中央に配置
-    model.x = app.renderer.width / 2;
-    model.y = app.renderer.height / 2;
-    model.anchor.set(0.5, 0.5);
-
-    // PixiJSのステージにモデルを追加
-    app.stage.addChild(model);
+    // モデルを画面に追加
+    app.stage.addChild(live2DModel);
+    console.log("Live2D モデルのロードが完了しました！");
 }
 
-// Live2Dモデルを読み込んで表示
+// PIXIアプリケーションを作成
+const app = new PIXI.Application({
+    view: document.getElementById("canvas"),
+    width: 800,
+    height: 600,
+    transparent: true
+});
+
+// モデルをロード
 loadLive2DModel();
