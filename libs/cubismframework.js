@@ -225,3 +225,11 @@ var LogLevel;
     Live2DCubismFramework.CubismFramework = $.CubismFramework;
 })(Live2DCubismFramework || (Live2DCubismFramework = {}));
 //# sourceMappingURL=live2dcubismframework.js.map
+window.CubismFramework = CubismFramework;
+window.CubismIdManager = CubismIdManager;
+window.CubismRenderer = CubismRenderer;
+window.CSM_ASSERT = CSM_ASSERT;
+window.CubismLogInfo = CubismLogInfo;
+window.CubismLogWarning = CubismLogWarning;
+window.Value = Value;
+window.Constant = Constant;
