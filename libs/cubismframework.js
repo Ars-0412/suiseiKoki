@@ -4,11 +4,7 @@
  * Use of this source code is governed by the Live2D Open Software license
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
-import { CubismIdManager } from './id/cubismidmanager';
-import { CubismRenderer } from './rendering/cubismrenderer';
-import { CSM_ASSERT, CubismLogInfo, CubismLogWarning } from './utils/cubismdebug';
-import { Value } from './utils/cubismjson';
-export function strtod(s, endPtr) {
+function strtod(s, endPtr) {
     let index = 0;
     for (let i = 1;; i++) {
         const testC = s.slice(i - 1, i);
@@ -40,11 +36,11 @@ let s_cubismIdManager = null;
 /**
  * Framework内で使う定数の宣言
  */
-export const Constant = Object.freeze({
+const Constant = Object.freeze({
     vertexOffset: 0, // メッシュ頂点のオフセット値
     vertexStep: 2 // メッシュ頂点のステップ値
 });
-export function csmDelete(address) {
+function csmDelete(address) {
     if (!address) {
         return;
     }
@@ -54,7 +50,7 @@ export function csmDelete(address) {
  * Live2D Cubism SDK Original Workflow SDKのエントリポイント
  * 利用開始時はCubismFramework.initialize()を呼び、CubismFramework.dispose()で終了する。
  */
-export class CubismFramework {
+class CubismFramework {
     /**
      * Cubism FrameworkのAPIを使用可能にする。
      *  APIを実行する前に必ずこの関数を実行すること。
@@ -205,12 +201,12 @@ export class CubismFramework {
      */
     constructor() { }
 }
-export class Option {
+class Option {
 }
 /**
  * ログ出力のレベル
  */
-export var LogLevel;
+var LogLevel;
 (function (LogLevel) {
     LogLevel[LogLevel["LogLevel_Verbose"] = 0] = "LogLevel_Verbose";
     LogLevel[LogLevel["LogLevel_Debug"] = 1] = "LogLevel_Debug";
@@ -220,9 +216,9 @@ export var LogLevel;
     LogLevel[LogLevel["LogLevel_Off"] = 5] = "LogLevel_Off"; // ログ出力無効
 })(LogLevel || (LogLevel = {}));
 // Namespace definition for compatibility.
-import * as $ from './live2dcubismframework';
+ * as $ from './live2dcubismframework';
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export var Live2DCubismFramework;
+ var Live2DCubismFramework;
 (function (Live2DCubismFramework) {
     Live2DCubismFramework.Constant = $.Constant;
     Live2DCubismFramework.csmDelete = $.csmDelete;
