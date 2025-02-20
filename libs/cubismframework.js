@@ -5,91 +5,83 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-// 必要なグローバル変数
+// グローバル変数定義
 let s_isStarted = false;
 let s_isInitialized = false;
 let s_option = null;
 let s_cubismIdManager = null;
 
-/**
- * Framework内で使う定数の宣言
- */
-const Constant = Object.freeze({
-    vertexOffset: 0,
-    vertexStep: 2
-});
-
-/**
- * Cubism Framework クラス
- */
-class CubismFramework {
-    /**
-     * Cubism FrameworkのAPIを使用可能にする
-     * @param {Object} option - オプション設定
-     * @return {boolean} - 初期化成功時 `true`
-     */
-    static startUp(option = null) {
+window.CubismFramework = {
+    startUp: function (option = null) {
         if (s_isStarted) {
             console.log('CubismFramework.startUp() is already done.');
             return s_isStarted;
         }
         s_option = option;
+        if (s_option != null && Live2DCubismCore && Live2DCubismCore.Logging) {
+            Live2DCubismCore.Logging.csmSetLogFunction(s_option.logFunction);
+        }
         s_isStarted = true;
+
+        if (s_isStarted && Live2DCubismCore && Live2DCubismCore.Version) {
+            const version = Live2DCubismCore.Version.csmGetVersion();
+            const major = (version & 0xff000000) >> 24;
+            const minor = (version & 0x00ff0000) >> 16;
+            const patch = version & 0x0000ffff;
+            console.log(`Live2D Cubism Core version: ${major}.${minor}.${patch}`);
+        }
+
         console.log('CubismFramework.startUp() is complete.');
         return s_isStarted;
-    }
+    },
 
-    /**
-     * Frameworkのリソースを初期化する
-     */
-    static initialize() {
+    initialize: function (memorySize = 0) {
         if (!s_isStarted) {
             console.warn('CubismFramework is not started.');
             return;
         }
+
         if (s_isInitialized) {
             console.warn('CubismFramework.initialize() skipped, already initialized.');
             return;
         }
-        s_cubismIdManager = new CubismIdManager();
+
+        if (!s_cubismIdManager) {
+            s_cubismIdManager = {}; // 修正: オブジェクトとして仮初期化
+        }
+
+        if (Live2DCubismCore && Live2DCubismCore.Memory) {
+            Live2DCubismCore.Memory.initializeAmountOfMemory(memorySize);
+        }
         s_isInitialized = true;
         console.log('CubismFramework.initialize() is complete.');
-    }
+    },
 
-    /**
-     * Frameworkのリソースを解放する
-     */
-    static dispose() {
+    dispose: function () {
         if (!s_isStarted) {
             console.warn('CubismFramework is not started.');
             return;
         }
+
         if (!s_isInitialized) {
             console.warn('CubismFramework.dispose() skipped, not initialized.');
             return;
         }
+
         s_cubismIdManager = null;
         s_isInitialized = false;
         console.log('CubismFramework.dispose() is complete.');
-    }
+    },
 
-    /**
-     * Cubism Framework の API を使用可能かチェック
-     * @return {boolean} - 使用可能なら `true`
-     */
-    static isStarted() {
+    isStarted: function () {
         return s_isStarted;
-    }
+    },
 
-    /**
-     * Cubism Framework が初期化されているかチェック
-     * @return {boolean} - 初期化済みなら `true`
-     */
-    static isInitialized() {
+    isInitialized: function () {
         return s_isInitialized;
-    }
-}
+    },
 
-// `window` に登録してグローバルにアクセス可能にする
-window.CubismFramework = CubismFramework;
-window.CubismConstant = Constant;
+    getIdManager: function () {
+        return s_cubismIdManager;
+    }
+};
