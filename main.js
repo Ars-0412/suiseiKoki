@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", async function () {
     console.log("Live2D モデルをロード中...");
 
+    // Live2D SDKのコアが正しく読み込まれているか確認
+    if (typeof Live2DCubismCore === "undefined") {
+        console.error("❌ Live2DCubismCore が読み込まれていません！");
+        return;
+    }
+
     // Live2Dモデルのパス
     const modelPath = "models/mymodel/suisei_tekoki.model3.json";
 
@@ -15,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.body.appendChild(app.view);
 
     try {
-        // Live2D Cubism 5 のモデルをロード
+        // Live2Dモデルのロード
         const model = await Live2DCubismCore.Model.loadFromFile(modelPath);
 
         // PixiJSのスプライトに変換
@@ -30,8 +36,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         app.stage.addChild(sprite);
 
-        console.log("Live2Dモデルのロードに成功しました！");
+        console.log("✅ Live2Dモデルのロードに成功しました！");
     } catch (error) {
-        console.error("Live2Dモデルの読み込みに失敗しました:", error);
+        console.error("❌ Live2Dモデルの読み込みに失敗しました:", error);
     }
 });
