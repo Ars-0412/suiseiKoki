@@ -1,47 +1,71 @@
-window.onload = async function() {
-    const canvas = document.getElementById("live2dCanvas");
-    const gl = canvas.getContext("webgl");
+async function loadLive2DModel() {
+    console.log("Live2Dモデルのロード中...");
 
-    if (!gl) {
-        console.error("WebGL コンテキストの取得に失敗しました。");
+    if (!window.CubismFramework) {
+        console.error("Live2D Cubism Framework がロードされていません！");
         return;
     }
 
-    console.log("✅ WebGLコンテキスト取得成功");
-
-    // Live2Dモデルのロード
-    await loadLive2DModel(gl, "models/suisei/suisei_tekoki.model3.json");
-};
-
-async function loadLive2DModel(gl, modelFile) {
     try {
-        console.log("📂 Live2Dモデルのロード中...");
+        // Live2Dモデルの設定
+        const modelPath = "models/suisei/suisei_tekoki.model3.json";
+        const modelSetting = new CubismModelSettingJson(await fetch(modelPath).then(res => res.json()));
 
-        const response = await fetch(modelFile);
-        if (!response.ok) {
-            throw new Error("❌ モデル設定ファイルの読み込みに失敗しました。");
+        console.log("モデル設定ファイルの読み込み成功: ", modelSetting);
+
+        // Live2Dモデルの読み込み
+        const moc3Path = modelSetting.getModelFileName();
+        console.log("Moc3ファイル:", moc3Path);
+
+        if (!moc3Path) {
+            throw new Error("Moc3ファイルが取得できません！");
         }
 
-        const arrayBuffer = await response.arrayBuffer();
-        const setting = new window.CubismModelSettingJson(arrayBuffer);
+        const moc3Data = await fetch(moc3Path).then(res => res.arrayBuffer());
+        const moc = Live2DCubismCore.Moc.fromArrayBuffer(moc3Data);
 
-        console.log("✅ モデル設定読み込み成功");
-        console.log("📌 Moc3 ファイル: ", setting.getModelFileName());
-
-        const moc3Response = await fetch("models/suisei/" + setting.getModelFileName());
-        if (!moc3Response.ok) {
-            throw new Error("❌ Moc3ファイルの読み込みに失敗しました。");
+        if (!moc) {
+            throw new Error("Moc3の読み込みに失敗しました！");
         }
 
-        const moc3ArrayBuffer = await moc3Response.arrayBuffer();
-        const moc3 = window.CubismMoc.create(moc3ArrayBuffer);
+        console.log("Moc3ファイルの読み込み成功");
 
-        if (!moc3) {
-            throw new Error("❌ Moc3の作成に失敗しました。");
+        // WebGLコンテキストの取得
+        const canvas = document.getElementById("live2dCanvas");
+        const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+        if (!gl) {
+            throw new Error("WebGLコンテキストが取得できませんでした！");
         }
 
-        console.log("✅ Moc3作成成功");
+        console.log("WebGLコンテキスト取得成功");
+
+        // Live2Dモデルの作成
+        const model = new CubismModel();
+        model.loadModel(moc);
+
+        console.log("Live2Dモデルのロード完了");
+
     } catch (error) {
-        console.error("🚨 Live2Dモデルのロードに失敗しました: ", error);
+        console.error("Live2Dモデルのロードに失敗しました: ", error);
     }
 }
+
+async function init() {
+    console.log("Live2Dモデルのロードを開始...");
+
+    // Live2D Cubism Framework の初期化
+    if (!window.CubismFramework) {
+        console.error("Live2D Cubism Framework がロードされていません！");
+        return;
+    }
+
+    CubismFramework.startUp();
+    CubismFramework.initialize();
+
+    console.log("Live2D Cubism Framework の初期化成功");
+
+    await loadLive2DModel();
+}
+
+window.onload = init;
