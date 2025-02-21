@@ -1,4 +1,3 @@
-
 // Live2DAppオブジェクトの定義
 const Live2DApp = {
     loadAssets: async function(gl, modelDir, modelFile) {
@@ -103,3 +102,4 @@ function init() {
 }
 
 init();
+
