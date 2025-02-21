@@ -22,6 +22,12 @@ const Live2DApp = {
             if (!moc3Response.ok) throw new Error('Moc3ファイルの読み込みに失敗しました');
 
             const moc3ArrayBuffer = await moc3Response.arrayBuffer();
+
+            console.log("CubismMoc.create() を呼ぶ前に Live2DCubismFramework をチェック: ", Live2DCubismFramework);
+            if (!Live2DCubismFramework || !Live2DCubismFramework.CubismMoc) {
+                throw new Error("Live2DCubismFramework が正しくロードされていません");
+            }
+
             const moc3 = Live2DCubismFramework.CubismMoc.create(moc3ArrayBuffer);
             console.log("Moc3の作成成功: ", moc3);
 
