@@ -1,0 +1,59 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "suisei_tekoki.moc3",
+    "Textures": [
+      "texture_00.png"
+    ],
+    "Physics": "suisei_tekoki.physics3.json",
+    "Pose": "suisei_tekoki.pose3.json",
+    "Expressions": [
+      {
+        "Name": "f01",
+        "File": "expressions/f01.exp3.json"
+      },
+      {
+        "Name": "f02",
+        "File": "expressions/f02.exp3.json"
+      }
+    ],
+    "Motions": {
+      "Idle": [
+        {
+          "File": "motions/idle_00.mtn",
+          "FadeInTime": 1.0,
+          "FadeOutTime": 1.0
+        }
+      ],
+      "Tap": [
+        {
+          "File": "motions/tap_00.mtn",
+          "FadeInTime": 0.5,
+          "FadeOutTime": 0.5
+        }
+      ]
+    }
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": ["ParamEyeLOpen", "ParamEyeROpen"]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": ["ParamMouthOpenY"]
+    }
+  ],
+  "HitAreas": [
+    {
+      "Name": "Head",
+      "Id": "HitAreaHead"
+    },
+    {
+      "Name": "Body",
+      "Id": "HitAreaBody"
+    }
+  ]
+}
