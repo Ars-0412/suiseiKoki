@@ -7,6 +7,7 @@ const modelPath = "models/mymodel/suisei_tekoki.model3.json";
 
 // Live2Dの設定
 let live2DModel = null;
+let cubismRenderer = null;
 
 // WebGLの初期化
 function initWebGL() {
@@ -30,6 +31,12 @@ async function loadLive2DModel() {
         // Live2Dのモデルを作成
         live2DModel = new Live2DCubismCore.Model(modelData);
 
+        // **Live2Dモデルを描画するためのレンダラーを作成**
+        cubismRenderer = new Live2DCubismCore.CubismRenderer_WebGL();
+        cubismRenderer.initialize(gl);
+        cubismRenderer.bindTexture(0, null);
+        cubismRenderer.setModel(live2DModel);
+
         console.log("✅ Live2Dモデルのロードに成功しました！");
         renderLoop(); // 描画ループ開始
     } catch (error) {
@@ -39,12 +46,12 @@ async function loadLive2DModel() {
 
 // 描画ループ
 function renderLoop() {
-    if (!live2DModel || !gl) return;
+    if (!live2DModel || !cubismRenderer || !gl) return;
 
     gl.clear(gl.COLOR_BUFFER_BIT);
-    
-    // Live2Dモデルを描画
-    live2DModel.draw();
+
+    // **レンダラーを使って描画**
+    cubismRenderer.drawModel();
 
     requestAnimationFrame(renderLoop);
 }
