@@ -6,20 +6,20 @@
     <title>Live2D Cubism 5 テスト</title>
     
     <!-- Live2D Core -->
-    <script src="lib/live2dcubismcore.min.js"></script>
+    <script type="module" src="lib/live2dcubismcore.min.js"></script>
 
-    <!-- Live2D Framework（すべて小文字に修正） -->
-    <script src="lib/cubismframework.js"></script>
-    <script src="lib/cubismmodelsettingjson.js"></script>
-    <script src="lib/cubismmodel.js"></script>
-    <script src="lib/cubismmotionmanager.js"></script>
-    <script src="lib/cubismmotion.js"></script>
-    <script src="lib/cubismphysics.js"></script>
-    <script src="lib/cubismpose.js"></script>
-    <script src="lib/cubismrenderer_webgl.js"></script>
+    <!-- Live2D Framework -->
+    <script type="module" src="lib/cubismframework.js"></script>
+    <script type="module" src="lib/cubismmodelsettingjson.js"></script>
+    <script type="module" src="lib/cubismmodel.js"></script>
+    <script type="module" src="lib/cubismmotionmanager.js"></script>
+    <script type="module" src="lib/cubismmotion.js"></script>
+    <script type="module" src="lib/cubismphysics.js"></script>
+    <script type="module" src="lib/cubismpose.js"></script>
+    <script type="module" src="lib/cubismrenderer_webgl.js"></script>
 
     <!-- メインスクリプト -->
-    <script src="main.js" defer></script>
+    <script type="module" src="main.js"></script>
 
     <style>
         body { margin: 0; overflow: hidden; }
@@ -30,3 +30,4 @@
     <canvas id="live2dCanvas"></canvas>
 </body>
 </html>
+
