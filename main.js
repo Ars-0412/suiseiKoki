@@ -7,12 +7,17 @@ const Live2DApp = {
             const response = await fetch(modelDir + modelFile);
             if (!response.ok) throw new Error('モデル設定ファイルの読み込みに失敗しました');
 
-            const arrayBuffer = await response.arrayBuffer();
-            const setting = new Live2DCubismFramework.CubismModelSettingJson(arrayBuffer);
-            console.log("モデル設定の読み込み成功: ", setting);
+            const jsonData = await response.json();
+            console.log("モデル設定の読み込み成功: ", jsonData);
+
+            if (!jsonData.FileReferences || !jsonData.FileReferences.Moc) {
+                throw new Error("モデル設定ファイルの 'FileReferences.Moc' が見つかりません");
+            }
+
+            const moc3FileName = jsonData.FileReferences.Moc;
+            console.log("Moc3 ファイル名: ", moc3FileName);
 
             // Moc3ファイルの読み込み
-            const moc3FileName = setting.getModelFileName();
             const moc3Response = await fetch(modelDir + moc3FileName);
             if (!moc3Response.ok) throw new Error('Moc3ファイルの読み込みに失敗しました');
 
@@ -25,25 +30,6 @@ const Live2DApp = {
             const model = Live2DCubismFramework.CubismModel.create(moc3);
             console.log("モデルオブジェクトの作成成功: ", model);
 
-            // テクスチャの読み込み
-            const textureCount = setting.getTextureCount();
-            for (let i = 0; i < textureCount; i++) {
-                const textureFileName = setting.getTextureFileName(i);
-                if (textureFileName) {
-                    const textureImage = new Image();
-                    textureImage.src = modelDir + textureFileName;
-                    await new Promise((resolve) => {
-                        textureImage.onload = () => {
-                            const texture = gl.createTexture();
-                            gl.bindTexture(gl.TEXTURE_2D, texture);
-                            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImage);
-                            resolve();
-                        };
-                    });
-                }
-            }
             return model;
         } catch (error) {
             console.error("Live2Dモデルのロードに失敗しました: ", error);
