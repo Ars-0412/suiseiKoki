@@ -1,40 +1,44 @@
-// main.js のフルコード
-
 import { Live2DModel } from "./lib/cubismmodel.js";
-import { CubismModelSettingJson } from "./lib/cubismmodel.js";
+import { CubismFramework } from "./lib/cubismframeworkconfig.js";
+import { CubismMoc } from "./lib/cubismmoc.js";
+import { CubismMotion } from "./lib/cubismmotion.js";
+import { CubismMotionManager } from "./lib/cubismmotionmanager.js";
+import { CubismPhysics } from "./lib/cubismphysics.js";
+import { CubismPose } from "./lib/cubismpose.js";
+import { CubismRenderer_WebGL } from "./lib/cubismrenderer_webgl.js";
+
+// WebGL コンテキストの作成
+let canvas = document.getElementById("live2dCanvas");
+let gl = canvas.getContext("webgl");
+
+if (!gl) {
+    console.error("WebGL がサポートされていません");
+}
+
+// Live2D Cubism の初期化
+CubismFramework.startUp();
+CubismFramework.initialize();
 
 async function loadLive2DModel() {
     console.log("Live2Dモデルをロード中...");
 
-    const modelPath = "models/suisei/suisei_tekoki.model3.json";
-    const response = await fetch(modelPath);
-    const modelJson = await response.json();
+    try {
+        const model = await Live2DModel.from("./models/suisei/suisei_tekoki.model3.json", {
+            autoInteract: true,
+        });
 
-    console.log("モデルデータファイルの読み込み成功:", modelPath);
+        console.log("Live2Dモデルのロード成功:", model);
+        
+        model.scale.set(0.5, 0.5);
+        model.position.set(0, 0);
 
-    const modelSetting = new CubismModelSettingJson(modelJson);
-
-    console.log("Live2Dモデル設定を解析:", modelSetting);
-
-    const mocFile = modelSetting.getModelFileName();
-    console.log("Moc3 ファイル:", mocFile);
-
-    const model = await Live2DModel.from(modelPath);
-    model.scale.set(0.5, 0.5);
-    model.x = window.innerWidth / 2;
-    model.y = window.innerHeight / 2;
-
-    const app = new PIXI.Application({
-        view: document.getElementById("live2dCanvas"),
-        autoStart: true,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        transparent: true,
-    });
-
-    app.stage.addChild(model);
+        document.body.appendChild(model.view);
+    } catch (error) {
+        console.error("Live2Dモデルのロードに失敗しました:", error);
+    }
 }
 
-window.onload = async () => {
+window.onload = async function () {
+    console.log("WebGLコンテキスト取得成功");
     await loadLive2DModel();
 };

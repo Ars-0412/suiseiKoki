@@ -1,3 +1,4 @@
+<!-- 修正済みの index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,20 +8,44 @@
 </head>
 <body>
     <canvas id="live2dCanvas" width="800" height="600"></canvas>
-
-    <!-- Live2D ライブラリの読み込み -->
-    <script type="module">
-        import "/lib/live2dcubismcore.min.js";
-        import "/lib/cubismframeworkconfig.js";
-        import "/lib/cubismmoc.js";
-        import "/lib/cubismmodel.js";
-        import "/lib/cubismmotion.js";
-        import "/lib/cubismmotionmanager.js";
-        import "/lib/cubismphysics.js";
-        import "/lib/cubismpose.js";
-        import "/lib/cubismrenderer.js";
-        import "/lib/cubismrenderer_webgl.js";
-        import "/main.js";
-    </script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
+
+
+// 修正済みの main.js
+import { Live2DModel } from "./lib/cubismmodel.js";
+import { CubismFramework } from "./lib/cubismframeworkconfig.js";
+import { CubismPhysics } from "./lib/cubismphysics.js";
+import { CubismPose } from "./lib/cubismpose.js";
+import { CubismRenderer_WebGL } from "./lib/cubismrenderer_webgl.js";
+
+async function init() {
+    const canvas = document.getElementById("live2dCanvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+    if (!gl) {
+        console.error("WebGLコンテキスト取得失敗");
+        return;
+    }
+
+    console.log("WebGLコンテキスト取得成功");
+    CubismFramework.startUp();
+    CubismFramework.initialize();
+
+    try {
+        const model = await Live2DModel.from("models/suisei/suisei_tekoki.model3.json");
+        model.scale = 1.0;
+        model.x = 0;
+        model.y = 0;
+        model.renderer = new CubismRenderer_WebGL();
+        model.renderer.initialize(gl);
+        model.renderer.model = model.internalModel;
+        model.update = true;
+        console.log("Live2Dモデルのロード成功");
+    } catch (error) {
+        console.error("Live2Dモデルのロードに失敗しました", error);
+    }
+}
+
+window.onload = init;
