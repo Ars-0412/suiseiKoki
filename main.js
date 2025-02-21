@@ -1,63 +1,82 @@
-async function loadAssets(modelDir, modelFile) {
-    console.log("モデル設定ファイルを読み込み中:", modelDir + modelFile);
+const Live2DApp = {
+    loadAssets: async function(gl, modelDir, modelFile) {
+        try {
+            console.log("Live2Dモデルのロード開始...");
 
-    // `model3.json` をフェッチ
-    const response = await fetch(modelDir + modelFile);
-    if (!response.ok) {
-        throw new Error("モデル設定ファイルの読み込みに失敗しました: " + response.status);
-    }
+            // モデル設定ファイル（model3.json）の読み込み
+            const response = await fetch(modelDir + modelFile);
+            if (!response.ok) throw new Error('モデル設定ファイルの読み込みに失敗しました');
 
-    // JSONデータとしてパース
-    const json = await response.json();
-    console.log("モデル設定読み込み成功:", json);
+            const arrayBuffer = await response.arrayBuffer();
+            const setting = new Live2DCubismFramework.CubismModelSettingJson(arrayBuffer);
+            console.log("モデル設定の読み込み成功: ", setting);
 
-    // `FileReferences` があるかチェック
-    if (!json.FileReferences || !json.FileReferences.Moc) {
-        throw new Error("モデル設定が不正です: " + JSON.stringify(json));
-    }
+            // Moc3ファイルの読み込み
+            const moc3FileName = setting.getModelFileName();
+            const moc3Response = await fetch(modelDir + moc3FileName);
+            if (!moc3Response.ok) throw new Error('Moc3ファイルの読み込みに失敗しました');
 
-    return json;
-}
+            const moc3ArrayBuffer = await moc3Response.arrayBuffer();
+            const moc3 = Live2DCubismFramework.CubismMoc.create(moc3ArrayBuffer);
+            console.log("Moc3の作成成功: ", moc3);
 
-async function init() {
-    console.log("Live2Dモデルをロード中...");
+            if (!moc3) throw new Error('Moc3の作成に失敗しました');
 
-    const modelDir = "models/suisei/";
-    const modelFile = "suisei_tekoki.model3.json";
+            const model = Live2DCubismFramework.CubismModel.create(moc3);
+            console.log("モデルオブジェクトの作成成功: ", model);
 
-    try {
-        const settings = await loadAssets(modelDir, modelFile);
+            // テクスチャの読み込み
+            const textureCount = setting.getTextureCount();
+            for (let i = 0; i < textureCount; i++) {
+                const textureFileName = setting.getTextureFileName(i);
+                if (textureFileName) {
+                    const textureImage = new Image();
+                    textureImage.src = modelDir + textureFileName;
+                    await new Promise((resolve) => {
+                        textureImage.onload = () => {
+                            const texture = gl.createTexture();
+                            gl.bindTexture(gl.TEXTURE_2D, texture);
+                            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureImage);
+                            resolve();
+                        };
+                    });
+                }
+            }
+            return model;
+        } catch (error) {
+            console.error("Live2Dモデルのロードに失敗しました: ", error);
+            return null;
+        }
+    },
 
-        console.log("モデル設定を取得:", settings);
-        console.log("Moc3 ファイル名:", settings.FileReferences.Moc);
-
-        // WebGLコンテキストを取得
+    init: async function() {
         const canvas = document.getElementById("live2dCanvas");
         const gl = canvas.getContext("webgl");
-
         if (!gl) {
-            throw new Error("WebGL を初期化できませんでした");
+            console.error("WebGLコンテキストの取得に失敗しました。");
+            return;
         }
 
-        console.log("WebGL コンテキスト取得成功");
+        console.log("WebGLコンテキスト取得成功");
 
-        // Moc3ファイルの読み込み
-        const mocResponse = await fetch(modelDir + settings.FileReferences.Moc);
-        if (!mocResponse.ok) {
-            throw new Error("Moc3ファイルの読み込みに失敗しました: " + settings.FileReferences.Moc);
+        const modelDir = "models/suisei/";
+        const modelFile = "suisei_tekoki.model3.json";
+
+        console.log("モデルファイルをロード: ", modelDir + modelFile);
+        const model = await this.loadAssets(gl, modelDir, modelFile);
+
+        if (!model) {
+            console.error("モデルのロードに失敗しました");
+            return;
         }
 
-        const mocArrayBuffer = await mocResponse.arrayBuffer();
-        console.log("Moc3ファイル読み込み成功");
-
-        const moc3 = Live2DCubismFramework.CubismMoc.create(mocArrayBuffer);
-        const model = Live2DCubismFramework.CubismModel.create(moc3);
-
-        console.log("Live2Dモデルのロード成功");
-
-    } catch (error) {
-        console.error("Live2Dモデルのロードに失敗しました", error);
+        console.log("Live2Dモデルのロード成功！");
     }
-}
+};
 
-window.onload = init;
+// Live2Dアプリの初期化
+window.onload = () => {
+    Live2DApp.init();
+};
