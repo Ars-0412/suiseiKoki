@@ -7,38 +7,35 @@ import { CubismPhysics } from "./lib/cubismphysics.js";
 import { CubismPose } from "./lib/cubismpose.js";
 import { CubismRenderer_WebGL } from "./lib/cubismrenderer_webgl.js";
 
-// WebGL コンテキストの作成
-let canvas = document.getElementById("live2dCanvas");
-let gl = canvas.getContext("webgl");
+async function init() {
+    const canvas = document.getElementById("live2dCanvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 
-if (!gl) {
-    console.error("WebGL がサポートされていません");
-}
+    if (!gl) {
+        console.error("WebGLコンテキスト取得失敗");
+        return;
+    }
 
-// Live2D Cubism の初期化
-CubismFramework.startUp();
-CubismFramework.initialize();
-
-async function loadLive2DModel() {
-    console.log("Live2Dモデルをロード中...");
+    console.log("WebGLコンテキスト取得成功");
+    CubismFramework.startUp();
+    CubismFramework.initialize();
 
     try {
-        const model = await Live2DModel.from("./models/suisei/suisei_tekoki.model3.json", {
-            autoInteract: true,
-        });
+        const model = await Live2DModel.from("./models/suisei/suisei_tekoki.model3.json");
 
-        console.log("Live2Dモデルのロード成功:", model);
-        
-        model.scale.set(0.5, 0.5);
-        model.position.set(0, 0);
+        model.scale.set(1.0, 1.0);
+        model.x = 0;
+        model.y = 0;
 
-        document.body.appendChild(model.view);
+        model.renderer = new CubismRenderer_WebGL();
+        model.renderer.initialize(gl);
+        model.renderer.model = model.internalModel;
+        model.update = true;
+
+        console.log("Live2Dモデルのロード成功");
     } catch (error) {
         console.error("Live2Dモデルのロードに失敗しました:", error);
     }
 }
 
-window.onload = async function () {
-    console.log("WebGLコンテキスト取得成功");
-    await loadLive2DModel();
-};
+window.onload = init;
