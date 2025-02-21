@@ -8,19 +8,19 @@
 <body>
     <canvas id="live2dCanvas" width="800" height="600"></canvas>
 
-    <!-- Live2D ライブラリの読み込み（順番が重要） -->
-    <script src="lib/live2dcubismcore.min.js"></script>
-    <script src="lib/cubismframeworkconfig.js"></script>
-    <script src="lib/cubismmoc.js"></script>
-    <script src="lib/cubismmodel.js"></script>
-    <script src="lib/cubismmotion.js"></script>
-    <script src="lib/cubismmotionmanager.js"></script>
-    <script src="lib/cubismphysics.js"></script>
-    <script src="lib/cubismpose.js"></script>
-    <script src="lib/cubismrenderer.js"></script>
-    <script src="lib/cubismrenderer_webgl.js"></script>
-
-    <!-- メインスクリプトの読み込み -->
-    <script src="main.js"></script>
+    <!-- Live2D ライブラリの読み込み -->
+    <script type="module">
+        import "/lib/live2dcubismcore.min.js";
+        import "/lib/cubismframeworkconfig.js";
+        import "/lib/cubismmoc.js";
+        import "/lib/cubismmodel.js";
+        import "/lib/cubismmotion.js";
+        import "/lib/cubismmotionmanager.js";
+        import "/lib/cubismphysics.js";
+        import "/lib/cubismpose.js";
+        import "/lib/cubismrenderer.js";
+        import "/lib/cubismrenderer_webgl.js";
+        import "/main.js";
+    </script>
 </body>
 </html>
