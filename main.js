@@ -2,6 +2,9 @@ const Live2DApp = {
     loadAssets: async function(gl, modelDir, modelFile) {
         try {
             console.log("Live2Dモデルのロード開始...");
+            
+            // Live2DCubismFramework の中身を確認
+            console.log("Live2DCubismFramework の状態: ", Live2DCubismFramework);
 
             // モデル設定ファイル（model3.json）の読み込み
             const response = await fetch(modelDir + modelFile);
