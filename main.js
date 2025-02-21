@@ -1,4 +1,6 @@
 // Live2DAppオブジェクトの定義
+const Live2DCubismFramework = window.Live2DCubismFramework || {};
+
 const Live2DApp = {
     loadAssets: async function(gl, modelDir, modelFile) {
         try {
